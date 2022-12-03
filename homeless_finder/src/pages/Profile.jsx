@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/authContext";
 import { processFirebaseErrors } from "../firebase/errors";
-const Register = () => {
+const Profile = () => {
 
 const [email,setEmail]= useState("");
 const [password, setPassword]= useState("");
@@ -39,7 +39,7 @@ if (loading) return <div>loading...</div>
         <>
         <Link to='/'>Home</Link>
         <form onSubmit={onSubmit}>
-            <h1>Register</h1>
+            <h1>Profile </h1>
             {error && <p style={{color: "red"}}>{error}</p>}
             <label>Email</label>
             <input 
@@ -62,11 +62,9 @@ if (loading) return <div>loading...</div>
             <input type="submit" value="Submit" />
 
         </form>
-        <p>
-            Already have an account? <Link to='/login'>Login</Link>
-        </p>
+        
         </>
     );
 };
 
-export default Register;
+export default Profile;
