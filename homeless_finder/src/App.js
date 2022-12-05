@@ -11,6 +11,7 @@ function App() {
     <div>
       <h2>Hello {user.email} </h2>
       <button onClick={logout}>Logout</button>
+      <button onClick={() => navigate("/profile")}>Profile</button>
     </div>
   )
   
@@ -24,6 +25,7 @@ function App() {
       <div className='buttons'>
       <button onClick={() => navigate("/login")}>Login</button>
       <button onClick={() => navigate("/register")}>Register</button>
+      <button onClick={() => navigate("/profile")}>Profile</button>
       </div>
 
 

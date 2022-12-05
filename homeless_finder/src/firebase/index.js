@@ -9,7 +9,12 @@ import {
   serverTimestamp,
   getFirestore,
   collection,
-  addDoc
+  addDoc,
+  doc,
+  getDoc,
+  query,
+  where,
+  getDocs,
 } from "firebase/firestore";
 
 
@@ -42,4 +47,10 @@ export {
   createUserWithEmailAndPassword, 
   signInWithEmailAndPassword, 
   collection, 
-  addDoc};
+  addDoc,
+  doc,
+  getDoc,
+  query,
+  where,
+  getDocs,
+  };

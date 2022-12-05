@@ -14,6 +14,7 @@ const AuthProvider = ({children}) => {
 
     // needs state to hold user information
     const [user,setUser] = useState()
+    const [userLoading, setUserLoading] = useState(false)
 
     // signup-register
     const register = async ({email, password}) => {
@@ -34,8 +35,10 @@ const AuthProvider = ({children}) => {
     // When the component loads we want to check if the user logged in
 
     useEffect(() => {
+        setUserLoading(true);
         const unsubscribe= auth.onAuthStateChanged(async (user)=>{
             setUser(user);
+            setUserLoading(false);
         })
         return () => {
             unsubscribe();
@@ -48,6 +51,7 @@ const AuthProvider = ({children}) => {
      register,
      login,
      logout,
+     userLoading,
     };
 
     return (
