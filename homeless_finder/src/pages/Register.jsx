@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/authContext";
 import { processFirebaseErrors } from "../firebase/errors";
+
 const Register = () => {
 
 const [email,setEmail]= useState("");
@@ -36,7 +37,7 @@ const onSubmit = async  (e)=>{
 if (loading) return <div>loading...</div>
 
     return (
-        <>
+        <div className="registerMain">
         <Link to='/'>Home</Link>
         <form onSubmit={onSubmit}>
             <h1>Register</h1>
@@ -65,7 +66,7 @@ if (loading) return <div>loading...</div>
         <p>
             Already have an account? <Link to='/login'>Login</Link>
         </p>
-        </>
+        </div>
     );
 };
 

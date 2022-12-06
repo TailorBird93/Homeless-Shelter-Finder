@@ -4,12 +4,13 @@ import { useAuth } from "../context/authContext";
 import { useProfile } from "../context/ProfileContext";
 import { processFirebaseErrors } from "../firebase/errors";
 
+
 const Profile = () => {
   const today = new Date();
   const jsonToday = today.toJSON().split("T");
   const [date] = jsonToday;
   const [profile, setProfile] = useState({
-    name: "",
+    name: "Bartosz",
     city: "amsterdam",
     startDate: date,
     endDate: null,
@@ -89,25 +90,23 @@ const Profile = () => {
 
   if (userProfile)
     return (
-        <>
+        <div className="profileMain">
         <Link to='/'>Home</Link>
-      <div>
+      <div className="loggedInMain">
         <h1>{user.email}</h1>
         <p>Name: {userProfile.name}</p>
-        <p>City: {userProfile.city}</p>
-        <p>
-          preferred guests' gender:{" "}
+        <p>Location: {userProfile.city}</p>
+        <p>Gender preference:{" "}
           {!userProfile.gender ? "Non preferred" : userProfile.gender}
         </p>
-        <p>Number of guests: {userProfile.guests}</p>
-        <p>Kids allowed: {userProfile.kids ? "yes" : "no"}</p>
-        <p>
-          {userProfile.startDate}-{userProfile.endDate}
+        <p>Maximum amount of guests: {userProfile.guests}</p>
+        <p>Underage guests allowed: {userProfile.kids ? "yes" : "no"}</p>
+        <p>Availability: from {userProfile.startDate} to {userProfile.endDate}
         </p>
         <button>Edit</button>
         <button>Delete</button>
       </div>
-      </>
+      </div>
     );
 
   return (

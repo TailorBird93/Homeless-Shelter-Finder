@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/authContext";
+import '../App.css';
 const Login = () => {
 
 const [email,setEmail]= useState("");
@@ -37,7 +38,7 @@ if (loading) return <div>loading...</div>
 if (error) return <div>{error}</div>
 
     return (
-        <>
+        <div className="loginForm">
         <Link to='/'>Home</Link>
         <form onSubmit={onSubmit}>
             <h1>Login</h1>
@@ -66,7 +67,7 @@ if (error) return <div>{error}</div>
         <p>
             Haven't got an account? <Link to='/register'>Register</Link>
         </p>
-        </>
+        </div>
     );
 };
 
