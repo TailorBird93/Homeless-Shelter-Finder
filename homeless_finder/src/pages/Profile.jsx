@@ -26,7 +26,7 @@ const Profile = () => {
   const [edit,setEdit]=useState(false);
 
 
-  const { addProfile, getUserProfile, userProfile } = useProfile();
+  const { addProfile, getUserProfile, userProfile, deleteProfile} = useProfile();
   const { user, userLoading } = useAuth();
   const navigate = useNavigate();
 
@@ -113,6 +113,11 @@ const Profile = () => {
     getFormWithProfile()
   }
 
+  const deleteDocument= () => {
+    deleteProfile(userProfile.id);
+    getUserProfile(user.uid);
+  }
+
   if (loading || userLoading) return <div>loading...</div>;
 
   if (userProfile && !edit)
@@ -131,7 +136,7 @@ const Profile = () => {
         <p>Availability: from {userProfile.startDate} to {userProfile.endDate}
         </p>
         <button onClick={openEdit}>Edit</button>
-        <button>Delete</button>
+        <button onClick={deleteDocument}>Delete</button>
       </div>
       </div>
     );
