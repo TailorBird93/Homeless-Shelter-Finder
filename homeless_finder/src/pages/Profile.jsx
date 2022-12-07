@@ -10,8 +10,8 @@ const Profile = () => {
   const jsonToday = today.toJSON().split("T");
   const [date] = jsonToday;
   const [profile, setProfile] = useState({
-    name: "Bartosz",
-    city: "amsterdam",
+    name: "",
+    city: "",
     startDate: date,
     endDate: null,
     guests: 0,
@@ -23,6 +23,8 @@ const Profile = () => {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [edit,setEdit]=useState(false);
+
 
   const { addProfile, getUserProfile, userProfile } = useProfile();
   const { user, userLoading } = useAuth();
@@ -44,11 +46,11 @@ const Profile = () => {
     const endDate = new Date(profile.endDate);
 
     if (startDate.getTime() < dateObj.getTime()) {
-      return setError("Start date can't be today");
+      return setError("Start date can't be earlier than today");
     }
 
     if (endDate.getTime() <= dateObj.getTime()) {
-      return setError("End date can't be today");
+      return setError("End date can't be earlier than today");
     }
 
     if (endDate.getTime() <= startDate.getTime()) {
@@ -63,11 +65,26 @@ const Profile = () => {
 
     try {
       setLoading(true);
+
+
+      if(!edit)
       await addProfile({
         ...profile,
         userId: user.uid,
       });
+
+      if (edit) {
+         await setEdit({
+          ...profile,
+          userId: user.uid,
+        });
+      }
+
+
+      await getUserProfile(user.uid);
       setLoading(false);
+      setEdit(false);
+      
       setError("");
     } catch (err) {
       console.log(err);
@@ -86,9 +103,19 @@ const Profile = () => {
     }
   }, [user, userLoading, navigate]);
 
+
+  const getFormWithProfile= async () => {
+    await getUserProfile(user.uid);
+    setProfile(userProfile);
+  }
+  const openEdit=() => {
+    setEdit(true);
+    getFormWithProfile()
+  }
+
   if (loading || userLoading) return <div>loading...</div>;
 
-  if (userProfile)
+  if (userProfile && !edit)
     return (
         <div className="profileMain">
         <Link to='/'>Home</Link>
@@ -97,13 +124,13 @@ const Profile = () => {
         <p>Name: {userProfile.name}</p>
         <p>Location: {userProfile.city}</p>
         <p>Gender preference:{" "}
-          {!userProfile.gender ? "Non preferred" : userProfile.gender}
+          {!userProfile.gender ? "No preference" : userProfile.gender}
         </p>
         <p>Maximum amount of guests: {userProfile.guests}</p>
         <p>Underage guests allowed: {userProfile.kids ? "yes" : "no"}</p>
         <p>Availability: from {userProfile.startDate} to {userProfile.endDate}
         </p>
-        <button>Edit</button>
+        <button onClick={openEdit}>Edit</button>
         <button>Delete</button>
       </div>
       </div>
@@ -112,7 +139,7 @@ const Profile = () => {
   return (
     <>
       <Link to='/'>Back</Link>
-      <form onSubmit={onSubmit}>
+      <form className="profileSetup" onSubmit={onSubmit}>
         <h1>Profile</h1>
         {error && <p style={{ color: "red" }}>{error}</p>}
         <label>Name</label>
@@ -137,13 +164,11 @@ const Profile = () => {
           value={profile.city}
         >
           <option disabled>Choose...</option>
-          <option default value='amsterdam'>
-            Amsterdam
-          </option>
-          <option value='utrecht'>Utrecht</option>
-          <option value='rotterdam'>Rotterdam</option>
-          <option value='den haag'>Den Haag</option>
-          <option value='tilburg'>Tilburg</option>
+          <option value='barry'>Barry</option>
+          <option value='london'>London</option>
+          <option value='cardiff'>Cardiff</option>
+          <option value='aberystwyth'>Aberystwyth</option>
+          <option value='belfast'>Belfast</option>
         </select>
         <label>Start Date</label>
         <input
@@ -178,9 +203,7 @@ const Profile = () => {
           value={profile.gender}
         >
           <option disabled>Choose...</option>
-          <option default value=''>
-            I Don't Care
-          </option>
+          <option default value=''>No preference</option>
           <option value='female'>Female Only</option>
           <option value='male'>Male only</option>
         </select>
@@ -195,7 +218,7 @@ const Profile = () => {
             });
           }}
         />
-        <label>Kids</label>
+        <label>Underage guests</label>
         <select
           onChange={(e) =>
             setProfile({
@@ -207,9 +230,9 @@ const Profile = () => {
         >
           <option disabled>Choose...</option>
           <option default value={true}>
-            No kids
+            No underage guests.
           </option>
-          <option value={false}>Kids are welcome</option>
+          <option value={false}>Underage guests are welcome</option>
         </select>
         <input type='submit' value='SUBMIT' />
       </form>
